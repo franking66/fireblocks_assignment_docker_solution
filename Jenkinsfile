@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    // options {
-    //     // Prevent Jenkins from doing an automatic SCM checkout.
-    //     skipDefaultCheckout()
-    // }
 
     environment {
         GETH_IMAGE = "fireblocks/geth-node:latest"
@@ -13,11 +9,11 @@ pipeline {
     }
 
     stages {
-        // stage('Clean Workspace') {
-        //     steps {
-        //         cleanWs()
-        //     }
-        // }
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
 
         stage('Checkout Code') {
             steps {
@@ -27,16 +23,16 @@ pipeline {
 
         stage('Create Dockerfiles') {
             steps {
-                sh '''
-                cat <<EOF > Dockerfile.geth
+                writeFile file: 'Dockerfile.geth', text: '''
                 FROM ubuntu:latest
-                RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y software-properties-common \
-                    && add-apt-repository -y ppa:ethereum/ethereum \
-                    && apt-get update && apt-get install -y ethereum
+                RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+                    apt-get install -y software-properties-common && \
+                    add-apt-repository -y ppa:ethereum/ethereum && \
+                    apt-get update && \
+                    apt-get install -y ethereum
                 VOLUME ["/root/.ethereum"]
                 EXPOSE 30303 30303/udp 8545 8546 8551
                 CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", "enode://<EthereumFoundationBootNodes>"]
-                EOF
                 '''
             }
         }
