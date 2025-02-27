@@ -10,7 +10,7 @@ pipeline {
 
         stage('Run Test Script') {
             steps {
-                sh 'python3 test.py'
+                sh 'chmod +x test.sh && ./test.sh'
             }
         }
     }
