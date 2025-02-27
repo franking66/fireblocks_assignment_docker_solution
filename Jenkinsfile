@@ -1,9 +1,9 @@
 pipeline {
     agent any
-    options {
-        // Prevent Jenkins from doing an automatic SCM checkout.
-        skipDefaultCheckout()
-    }
+    #options {
+    #    // Prevent Jenkins from doing an automatic SCM checkout.
+    #    skipDefaultCheckout()
+    #}
     stages {
         stage('Clean Workspace') {
             steps {
