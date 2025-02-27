@@ -13,11 +13,13 @@ pipeline {
                 sh 'chmod +x test.sh && ./test.sh'
             }
         }
-    }
+    
         stage('Clean Workspace') {
             steps {
                 deleteDir()
             }
+        } 
+        
     }
 
 }
