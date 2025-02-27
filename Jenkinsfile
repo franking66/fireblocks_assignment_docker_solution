@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                cleanWs()
+                deleteDir()
             }
         }
 
@@ -23,7 +23,7 @@ pipeline {
 
         stage('Create Dockerfiles') {
             steps {
-                writeFile file: 'Dockerfile.geth', text: """\
+                writeFile file: 'Dockerfile.geth', text: """
 FROM ubuntu:latest
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get install -y software-properties-common && \
@@ -59,10 +59,10 @@ CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.
                 sh """
                 docker stop geth-node || true
                 docker rm geth-node || true
-                docker run -d --name geth-node --restart unless-stopped \\
-                    -v ${GETH_DATA_DIR}:/root/.ethereum \\
-                    -p 30303:30303 -p 30303:30303/udp \\
-                    -p 8545:8545 -p 8546:8546 -p 8551:8551 \\
+                docker run -d --name geth-node --restart unless-stopped \
+                    -v ${GETH_DATA_DIR}:/root/.ethereum \
+                    -p 30303:30303 -p 30303:30303/udp \
+                    -p 8545:8545 -p 8546:8546 -p 8551:8551 \
                     ${GETH_IMAGE}
                 """
             }
