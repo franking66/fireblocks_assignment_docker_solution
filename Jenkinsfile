@@ -54,15 +54,18 @@ pipeline {
                 docker rm geth-node || true
                 docker stop prysm-node || true
                 docker rm prysm-node || true
-                
+
+                mkdir -p /var/lib/docker-volumes/geth
+                mkdir -p /var/lib/docker-volumes/prysm
+
                 docker run -d --name geth-node --restart unless-stopped \
-                    -v '${GETH_DATA_DIR}:/root/.ethereum' \
+                    -v "/var/lib/docker-volumes/geth:/root/.ethereum" \
                     -p 30303:30303 -p 30303:30303/udp \
                     -p 8545:8545 -p 8546:8546 -p 8551:8551 \
                     ${GETH_IMAGE}
-                
+
                 docker run -d --name prysm-node --restart unless-stopped \
-                    -v '${PRYSM_DATA_DIR}:/data' \
+                    -v "/var/lib/docker-volumes/prysm:/data" \
                     -p 4000:4000 \
                     ${PRYSM_IMAGE}
                 '''
