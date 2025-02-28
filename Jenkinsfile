@@ -40,7 +40,7 @@ pipeline {
         stage('Update Docker Registry') {
             steps {
                 sh '''
-                echo "!Q@W3e4r" | docker login -u "admin" --password-stdin
+                echo "!Q@W#E4r5t6y" | docker login -u "messagefrank@outlook.com" --password-stdin
                 docker push ${GETH_IMAGE}
                 docker push ${PRYSM_IMAGE}
                 '''
