@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:latest 
 
 # Install dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -14,7 +14,5 @@ VOLUME ["/root/.ethereum"]
 EXPOSE 30303 30303/udp 8545 8546 8551
 
 # Start Geth with light sync mode
-CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", 
-"enode://7d4eacb9c8e1a038a50c9184045eb60606dc08c109e2be21b43b5e0ee2bb42f7fa3d3c1d30d9a14a59f751da024cc7d1a3b3b0f269f263a0e8eb569b9b372e99@34.255.23.113:30303",
-"enode://176b94135ebdf34d60a1a07888c35b620bbfc2fa320c8fc3d74f5ebf58e22901ff9f1e1b303cf3c6b3b36862c6703467cf2dc5c4cf5d9ccf11c68e8f2eeb7344@52.18.72.1:30303",
-"enode://4233eb20dc00fa6bb3cbad15bc5fd88f77c2c48164983341ddc8d0c54d2a1b682b9d405bdf3cb2f160c84c2fa8a5c7c2765833ad7e7b56a5e2046b146bd2c3a7@3.248.87.14:30303"]
+CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes",
+"enode://7d4eacb9c8e1a038a50c9184045eb60606dc08c109e2be21b43b5e0ee2bb42f7fa3d3c1d30d9a14a59f751da024cc7d1a3b3b0f269f263a0e8eb569b9b372e99@34.255.23.113:30303,enode://176b94135ebdf34d60a1a07888c35b620bbfc2fa320c8fc3d74f5ebf58e22901ff9f1e1b303cf3c6b3b36862c6703467cf2dc5c4cf5d9ccf11c68e8f2eeb7344@52.18.72.1:30303,enode://4233eb20dc00fa6bb3cbad15bc5fd88f77c2c48164983341ddc8d0c54d2a1b682b9d405bdf3cb2f160c84c2fa8a5c7c2765833ad7e7b56a5e2046b146bd2c3a7@3.248.87.14:30303"]
