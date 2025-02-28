@@ -57,10 +57,10 @@ pipeline {
                 docker stop prysm-node || true
                 docker rm prysm-node || true
                 
-                sudo mkdir -p /var/lib/docker-volumes/geth
-                sudo mkdir -p /var/lib/docker-volumes/prysm
-                sudo chown -R 1000:1000 /var/lib/docker-volumes/geth
-                sudo chown -R 1000:1000 /var/lib/docker-volumes/prysm
+                mkdir -p /var/lib/docker-volumes/geth
+                mkdir -p /var/lib/docker-volumes/prysm
+                chmod -R 777 /var/lib/docker-volumes/geth
+                chmod -R 777 /var/lib/docker-volumes/prysm
                 
                 docker run -d --name geth-node --restart unless-stopped \
                     -v "/var/lib/docker-volumes/geth:/root/.ethereum" \
