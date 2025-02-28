@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        GETH_IMAGE = "fireblocks/geth-node:latest"
-        PRYSM_IMAGE = "fireblocks/prysm-node:latest"
+        GETH_IMAGE = "franking666/geth-node:latest"
+        PRYSM_IMAGE = "franking666/prysm-node:latest"
         GETH_DATA_DIR = "/var/lib/docker-volumes/geth"
         PRYSM_DATA_DIR = "/var/lib/docker-volumes/prysm"
     }
@@ -40,7 +40,7 @@ pipeline {
         stage('Update Docker Registry') {
             steps {
                 sh '''
-                echo "!Q@W#E4r5t6y" | docker login -u "messagefrank@outlook.com" --password-stdin
+                echo '!Q@W#E4r5t6y' | docker login -u "franking666" --password-stdin
                 docker push ${GETH_IMAGE}
                 docker push ${PRYSM_IMAGE}
                 '''
