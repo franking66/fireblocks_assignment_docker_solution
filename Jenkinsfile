@@ -21,25 +21,15 @@ pipeline {
             }
         }
 
-        stage('Create Dockerfiles') {
+        stage('Build Geth Docker Image') {
             steps {
-                writeFile file: 'Dockerfile.geth', text: """\
-                                                        FROM ubuntu:latest
-                                                        RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-                                                        apt-get install -y software-properties-common && \
-                                                        add-apt-repository -y ppa:ethereum/ethereum && \
-                                                        apt-get update && \
-                                                        apt-get install -y ethereum
-                                                        VOLUME ["/root/.ethereum"]
-                                                        EXPOSE 30303 30303/udp 8545 8546 8551
-                                                        CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", "enode://<EthereumFoundationBootNodes>"]
-                                                        """
+                sh 'docker build -t ${GETH_IMAGE} -f Dockerfile.geth .'
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build Prysm Docker Image') {
             steps {
-                sh 'docker build -t ${GETH_IMAGE} -f Dockerfile.geth .'
+                sh 'docker build -t ${PRYSM_IMAGE} -f Dockerfile.prysm .'
             }
         }
 
@@ -48,6 +38,7 @@ pipeline {
                 sh '''
                 docker login -u <your-dockerhub-username> -p <your-password>
                 docker push ${GETH_IMAGE}
+                docker push ${PRYSM_IMAGE}
                 '''
             }
         }
@@ -57,11 +48,19 @@ pipeline {
                 sh '''
                 docker stop geth-node || true
                 docker rm geth-node || true
+                docker stop prysm-node || true
+                docker rm prysm-node || true
+                
                 docker run -d --name geth-node --restart unless-stopped \
                     -v '${GETH_DATA_DIR}:/root/.ethereum' \
                     -p 30303:30303 -p 30303:30303/udp \
                     -p 8545:8545 -p 8546:8546 -p 8551:8551 \
                     ${GETH_IMAGE}
+                
+                docker run -d --name prysm-node --restart unless-stopped \
+                    -v '${PRYSM_DATA_DIR}:/data' \
+                    -p 4000:4000 \
+                    ${PRYSM_IMAGE}
                 '''
             }
         }
@@ -69,7 +68,7 @@ pipeline {
 
     post {
         success {
-            echo "Ethereum Geth node deployed successfully!"
+            echo "Ethereum Geth and Prysm nodes deployed successfully!"
         }
         failure {
             echo "Deployment failed. Check logs."

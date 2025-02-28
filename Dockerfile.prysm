@@ -1,0 +1,17 @@
+FROM ubuntu:latest
+
+# Install dependencies and download Prysm binary
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y wget && \
+    wget https://github.com/prysmaticlabs/prysm/releases/latest/download/beacon-chain-linux-amd64 && \
+    chmod +x beacon-chain-linux-amd64 && \
+    mv beacon-chain-linux-amd64 /usr/local/bin/beacon-chain
+
+# Create storage directory for Prysm
+VOLUME ["/data"]
+
+# Expose necessary ports
+EXPOSE 4000
+
+# Start Prysm beacon node
+CMD ["beacon-chain", "--mainnet", "--accept-terms-of-use", "--rpc-host", "0.0.0.0", "--rpc-port", "4000"]
