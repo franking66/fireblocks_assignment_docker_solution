@@ -24,16 +24,16 @@ pipeline {
         stage('Create Dockerfiles') {
             steps {
                 writeFile file: 'Dockerfile.geth', text: """\
-FROM ubuntu:latest
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:ethereum/ethereum && \
-    apt-get update && \
-    apt-get install -y ethereum
-VOLUME ["/root/.ethereum"]
-EXPOSE 30303 30303/udp 8545 8546 8551
-CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", "enode://<EthereumFoundationBootNodes>"]
-"""
+                                                        FROM ubuntu:latest
+                                                        RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+                                                        apt-get install -y software-properties-common && \
+                                                        add-apt-repository -y ppa:ethereum/ethereum && \
+                                                        apt-get update && \
+                                                        apt-get install -y ethereum
+                                                        VOLUME ["/root/.ethereum"]
+                                                        EXPOSE 30303 30303/udp 8545 8546 8551
+                                                        CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", "enode://<EthereumFoundationBootNodes>"]
+                                                        """
             }
         }
 
