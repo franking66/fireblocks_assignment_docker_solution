@@ -24,7 +24,7 @@ pipeline {
         stage('Build Geth Docker Image') {
             steps {
                 sh '''
-                docker rmi -f ${GETH_IMAGE} || true
+                docker images -q ${GETH_IMAGE} && docker rmi -f ${GETH_IMAGE} || true
                 docker build -t ${GETH_IMAGE} -f Dockerfile.geth .
                 '''
             }
@@ -33,7 +33,7 @@ pipeline {
         stage('Build Prysm Docker Image') {
             steps {
                 sh '''
-                docker rmi -f ${PRYSM_IMAGE} || true
+                docker images -q ${PRYSM_IMAGE} && docker rmi -f ${PRYSM_IMAGE} || true
                 docker build -t ${PRYSM_IMAGE} -f Dockerfile.prysm .
                 '''
             }
@@ -57,8 +57,10 @@ pipeline {
                 docker stop prysm-node || true
                 docker rm prysm-node || true
                 
-                mkdir -p /var/lib/docker-volumes/geth
-                mkdir -p /var/lib/docker-volumes/prysm
+                sudo mkdir -p /var/lib/docker-volumes/geth
+                sudo mkdir -p /var/lib/docker-volumes/prysm
+                sudo chown -R 1000:1000 /var/lib/docker-volumes/geth
+                sudo chown -R 1000:1000 /var/lib/docker-volumes/prysm
                 
                 docker run -d --name geth-node --restart unless-stopped \
                     -v "/var/lib/docker-volumes/geth:/root/.ethereum" \
