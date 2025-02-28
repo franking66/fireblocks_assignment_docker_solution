@@ -1,4 +1,4 @@
-FROM ubuntu:latest 
+FROM ubuntu:latest
 
 # Install dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -13,5 +13,9 @@ VOLUME ["/root/.ethereum"]
 # Expose necessary ports
 EXPOSE 30303 30303/udp 8545 8546 8551
 
-# Start Geth with `snap` sync mode
-CMD ["geth", "--syncmode=snap", "--http", "--http.addr=0.0.0.0", "--http.port=8545", "--http.api=eth,net,web3,admin", "--ws", "--ws.addr=0.0.0.0", "--ws.port=8546"]
+# Copy entrypoint script
+COPY geth-entrypoint.sh /usr/local/bin/geth-entrypoint.sh
+RUN chmod +x /usr/local/bin/geth-entrypoint.sh
+
+# Start Geth with Snap Sync mode
+ENTRYPOINT ["/usr/local/bin/geth-entrypoint.sh"]
