@@ -23,13 +23,17 @@ pipeline {
 
         stage('Build Geth Docker Image') {
             steps {
-                sh 'docker build -t ${GETH_IMAGE} -f Dockerfile.geth .'
+                sh '''
+                docker build -t ${GETH_IMAGE} -f Dockerfile.geth .
+                '''
             }
         }
 
         stage('Build Prysm Docker Image') {
             steps {
-                sh 'docker build -t ${PRYSM_IMAGE} -f Dockerfile.prysm .'
+                sh '''
+                docker build -t ${PRYSM_IMAGE} -f Dockerfile.prysm .
+                '''
             }
         }
 
