@@ -14,5 +14,4 @@ VOLUME ["/root/.ethereum"]
 EXPOSE 30303 30303/udp 8545 8546 8551
 
 # Start Geth with light sync mode
-CMD ["geth", "--syncmode=light", "--http", "--http.addr=0.0.0.0", "--http.port=8545", "--http.api=eth,net,web3,admin", "--ws", "--ws.addr=0.0.0.0", "--ws.port=8546", "--bootnodes=enode://52a0468c72b3c7d6531a7f2f00251bd7a5d087d8b1f3ef1e64ef4957d64c68e0155143ef23f0cd5dd7f3d375aa45fd0845e4a72e04138dcf1928c1f7bcffce3a@34.255.23.113:30303,enode://3a2c2cc0e444b35b5a9706d9c20b80c45c948ebd6d14de1b36adf244bfab8cf26ad5b2f9a4731c0efdc4ae25c0a3b31d983aa5dc4e09ff5d73a83322f169b30a@52.18.72.1:30303,enode://1fc7f568e3c71e6a203496348108f1b756ce46bd3065f325a4c5b2934d0c5e3e1187e3c31786cfe9b21c9baf1dc9bcdd8e41bb270c3cbcf6a28ae3735e6a902f@3.248.87.14:30303"]
-
+CMD ["geth", "--syncmode=light", "--http", "--http.addr=0.0.0.0", "--http.port=8545", "--http.api=eth,net,web3,admin", "--ws", "--ws.addr=0.0.0.0", "--ws.port=8546"]
