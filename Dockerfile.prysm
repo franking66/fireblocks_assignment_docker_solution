@@ -1,11 +1,20 @@
 FROM ubuntu:latest
 
-# Install dependencies and download Prysm binary
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y wget && \
-    wget https://github.com/prysmaticlabs/prysm/releases/latest/download/beacon-chain-linux-amd64 && \
-    chmod +x beacon-chain-linux-amd64 && \
-    mv beacon-chain-linux-amd64 /usr/local/bin/beacon-chain
+# Set noninteractive mode for apt-get to prevent prompts
+ENV DEBIAN_FRONTEND=noninteractive 
+
+# Install necessary dependencies
+RUN apt-get update && \
+    apt-get install -y wget curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Verify the URL before downloading
+RUN wget --spider --no-check-certificate https://github.com/prysmaticlabs/prysm/releases/latest/download/beacon-chain-linux-amd64 || exit 1
+
+# Download Prysm beacon-chain binary safely
+RUN wget -q --show-progress --progress=bar:force:noscroll --no-check-certificate \
+    https://github.com/prysmaticlabs/prysm/releases/latest/download/beacon-chain-linux-amd64 -O /usr/local/bin/beacon-chain && \
+    chmod +x /usr/local/bin/beacon-chain
 
 # Create storage directory for Prysm
 VOLUME ["/data"]
