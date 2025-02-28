@@ -39,11 +39,13 @@ pipeline {
 
         stage('Update Docker Registry') {
             steps {
-                sh '''
-                docker login -u <your-dockerhub-username> -p <your-password>
-                docker push ${GETH_IMAGE}
-                docker push ${PRYSM_IMAGE}
-                '''
+                withCredentials([string(credentialsId: 'docker-hub-password', variable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                    echo "$DOCKER_PASSWORD" | docker login -u "<your-dockerhub-username>" --password-stdin
+                    docker push ${GETH_IMAGE}
+                    docker push ${PRYSM_IMAGE}
+                    '''
+                }
             }
         }
 
