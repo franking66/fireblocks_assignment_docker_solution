@@ -14,4 +14,4 @@ VOLUME ["/root/.ethereum"]
 EXPOSE 30303 30303/udp 8545 8546 8551
 
 # Start Geth with light sync mode
-CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", "enode://<EthereumFoundationBootNodes>"]
+CMD ["geth", "--syncmode", "light", "--http", "--http.addr", "0.0.0.0", "--http.port", "8545", "--http.api", "eth,net,web3,admin", "--ws", "--ws.addr", "0.0.0.0", "--ws.port", "8546", "--bootnodes", "enode://5d4f15aa3b5b12d3c27d8328e4766a6f8f69a39e6d09c1c98c0537e6f97e76b9f44b9477a7317e4bfc39ff357d676cf6017807b4808f056e37a1a0293e86027fc@52.16.188.185:30303,enode://b4723fdfc3504ef8de8c0ad7e5de34b554e08d9f9cc47f4b85dd2c33b8b8eb2b9abcf5033c507027fb18f31be81e668db5e6a6e54265ff35c936accc8e8f443c@3.209.45.79:30303"]
