@@ -9,9 +9,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Fetch latest Prysm version dynamically and download the binary
-RUN PRYSM_VERSION=$(curl -s https://api.github.com/repos/prysmaticlabs/prysm/releases/latest | jq -r '.tag_name') && \
+RUN export PRYSM_VERSION=$(curl -s https://api.github.com/repos/prysmaticlabs/prysm/releases/latest | jq -r '.tag_name') && \
+    echo "Downloading Prysm version: $PRYSM_VERSION" && \
     wget -q --show-progress --progress=bar:force:noscroll --no-check-certificate \
-    "https://github.com/prysmaticlabs/prysm/releases/download/${PRYSM_VERSION}/beacon-chain-linux-amd64" -O /usr/local/bin/beacon-chain && \
+    "https://github.com/prysmaticlabs/prysm/releases/download/$PRYSM_VERSION/beacon-chain-linux-amd64" -O /usr/local/bin/beacon-chain && \
     chmod +x /usr/local/bin/beacon-chain
 
 # Create storage directory for Prysm
