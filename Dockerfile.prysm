@@ -8,12 +8,12 @@ RUN apt-get update && \
     apt-get install -y wget curl jq && \
     rm -rf /var/lib/apt/lists/*
 
-# Fetch latest Prysm version dynamically
+# Fetch latest Prysm version dynamically and download the correct binary
 RUN export PRYSM_VERSION=$(curl -s https://api.github.com/repos/prysmaticlabs/prysm/releases/latest | jq -r '.tag_name') && \
-    echo "Latest Prysm version: $PRYSM_VERSION" && \
-    PRYSM_BINARY_URL=$(curl -s https://api.github.com/repos/prysmaticlabs/prysm/releases/latest | jq -r '.assets[] | select(.name | test("beacon-chain-linux-amd64")) | .browser_download_url') && \
-    echo "Downloading from: $PRYSM_BINARY_URL" && \
-    wget -q --show-progress --progress=bar:force:noscroll --no-check-certificate "$PRYSM_BINARY_URL" -O /usr/local/bin/beacon-chain && \
+    export PRYSM_BINARY=$(curl -s https://api.github.com/repos/prysmaticlabs/prysm/releases/latest | jq -r '.assets[] | select(.name | test("beacon-chain.*linux-amd64$")) | .name') && \
+    echo "Downloading Prysm: $PRYSM_BINARY" && \
+    wget -q --show-progress --progress=bar:force:noscroll --no-check-certificate \
+    "https://github.com/prysmaticlabs/prysm/releases/download/${PRYSM_VERSION}/${PRYSM_BINARY}" -O /usr/local/bin/beacon-chain && \
     chmod +x /usr/local/bin/beacon-chain
 
 # Create storage directory for Prysm
@@ -23,4 +23,4 @@ VOLUME ["/data"]
 EXPOSE 4000
 
 # Start Prysm beacon node
-CMD ["beacon-chain", "--mainnet", "--accept-terms-of-use", "--rpc-host", "0.0.0.0", "--rpc-port", "4000"]
+CMD ["/usr/local/bin/beacon-chain", "--mainnet", "--accept-terms-of-use", "--rpc-host", "0.0.0.0", "--rpc-port", "4000"]
